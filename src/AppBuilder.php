@@ -2,9 +2,8 @@
 
 namespace Guestbook;
 
+use Guestbook\Controller\HealthCheck;
 use Slim\App;
-use Slim\Http\Request;
-use Slim\Http\Response;
 
 class AppBuilder
 {
@@ -12,10 +11,13 @@ class AppBuilder
     {
         $app = new App;
 
-        $app->get('/healthcheck', function (Request $request, Response $response, array $args) {
-            return $response;
-        });
+        self::setUpRoutes($app);
 
         return $app;
+    }
+
+    private static function setUpRoutes($app)
+    {
+        $app->get('/healthcheck', HealthCheck::class . ':healthcheck');
     }
 }
