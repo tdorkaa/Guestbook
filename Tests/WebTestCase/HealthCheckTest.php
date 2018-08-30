@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Controller;
+namespace Tests\WebTestCase;
 
 use PHPUnit\Framework\TestCase;
 
-class HealthCheckControllerTest extends TestCase
+class HealthCheckTest extends TestCase
 {
     use WebTestCase;
 

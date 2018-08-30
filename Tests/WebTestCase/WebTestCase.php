@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Controller;
+namespace Tests\WebTestCase;
 
 use Guestbook\AppBuilder;
 use Slim\Http\Request;
