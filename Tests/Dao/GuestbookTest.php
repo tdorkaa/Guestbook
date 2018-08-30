@@ -14,6 +14,7 @@ class GuestbookTest extends TestCase
     {
         $pdoFactory = new PdoFactory();
         $this->PDO = $pdoFactory->getPDO();
+        $this->PDO->query('TRUNCATE TABLE messages');
     }
 
     /**
@@ -21,7 +22,6 @@ class GuestbookTest extends TestCase
      */
     public function listMessages_MessageExists_ReturnsMessage()
     {
-        $this->PDO->query('TRUNCATE TABLE messages');
         $records = [
             [
                 'name' => 'test name 1',
@@ -36,6 +36,41 @@ class GuestbookTest extends TestCase
         $result = $guestBookDao->listMessages();
 
         $this->assertEquals($records, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function listMessages_MultipleMessageExists_ReturnsMessagesInOrder()
+    {
+        $records = [
+            [
+                'name' => 'test name 1',
+                'email' => 'test email 1',
+                'message' => 'test message 1',
+                'created_at' => '2018-08-29 10:00:00',
+            ],
+            [
+                'name' => 'test name 2',
+                'email' => 'test email 2',
+                'message' => 'test message 2',
+                'created_at' => '2018-08-30 10:00:00',
+            ],
+            [
+                'name' => 'test name 3',
+                'email' => 'test email 3',
+                'message' => 'test message 3',
+                'created_at' => '2018-08-21 10:00:00',
+            ]
+        ];
+        $this->createRecords($records);
+
+        $guestBookDao = new GuestBook($this->PDO);
+        $result = $guestBookDao->listMessages();
+
+        $this->assertEquals($records[1], $result[0]);
+        $this->assertEquals($records[0], $result[1]);
+        $this->assertEquals($records[2], $result[2]);
     }
 
     private function createRecords($records)

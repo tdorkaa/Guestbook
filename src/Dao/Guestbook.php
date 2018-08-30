@@ -11,16 +11,15 @@ class Guestbook
      */
     private $PDO;
 
-    public function __construct()
+    public function __construct(\PDO $PDO)
     {
-        $pdoFactory = new PdoFactory();
-        $this->PDO = $pdoFactory->getPDO();
+        $this->PDO = $PDO;
     }
 
     public function listMessages()
     {
         $statement = $this->PDO->query('SELECT name, email, message, created_at 
-                                        FROM messages');
+                                        FROM messages ORDER BY created_at DESC');
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
