@@ -2,6 +2,7 @@
 
 namespace Guestbook;
 
+use Dotenv\Dotenv;
 use Guestbook\Controller\HealthCheck;
 use PDO;
 use Slim\App;
@@ -13,6 +14,7 @@ class AppBuilder
         $app = new App;
         $container = $app->getContainer();
 
+        self::loadEnv();
         self::setUpDb($container);
         self::setUpDependencies($container);
         self::setUpRoutes($app);
@@ -29,8 +31,8 @@ class AppBuilder
     {
         $container['pdo'] = function () {
             return new PDO('mysql:host=mysql;charset=utf8mb4',
-                'academy',
-                'academy',
+                getenv('DB_USER'),
+                getenv('DB_PASSWORD'),
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
         };
@@ -43,5 +45,13 @@ class AppBuilder
                 $container['pdo']
             );
         };
+    }
+
+    public static function loadEnv()
+    {
+        $dotenvFile = 'development.env';
+
+        $dotenv = new Dotenv(__DIR__ . '/../config', $dotenvFile);
+        $dotenv->load();
     }
 }
