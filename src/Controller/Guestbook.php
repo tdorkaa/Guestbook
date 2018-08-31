@@ -2,6 +2,7 @@
 namespace Guestbook\Controller;
 
 
+use DateTime;
 use Guestbook\Dao\Messages;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -30,5 +31,17 @@ class Guestbook
     {
         $messages = $this->messagesDao->listMessages();
         $this->twig->render($response, 'guestbook.html.twig', ['messages' => $messages]);
+    }
+
+    public function saveMessage(Request $request, Response $response, array $args)
+    {
+        $name = $request->getParam('name');
+        $email = $request->getParam('email');
+        $message = $request->getParam('message');
+        $date = date('Y-m-d H:i:s');
+
+        $this->messagesDao->saveMessage($name, $email, $message, $date);
+
+        $response->withRedirect('/guestbook');
     }
 }
