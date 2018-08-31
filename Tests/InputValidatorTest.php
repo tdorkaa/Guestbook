@@ -65,4 +65,14 @@ class InputValidatorTest extends TestCase
             $this->assertEquals('Email is not correct', $exception->getMessage());
         }
     }
+
+    /**
+     * @test
+     */
+    public function validate_GivenValidParams_NotThrowsException()
+    {
+        $result = $this->inputValidator->validate('test name', 'test@test.test', 'message');
+        $this->assertNull($result);
+
+    }
 }

@@ -1,3 +1,21 @@
+<form method="post" action="/guestbook/save">
+    <div><strong>Please fill out our Guest Book!</strong></div>
+    <br>
+    <pre>{{ errors|replace({',': "\n"}) }}</pre>
+    <div>
+        <span>Your name:        </span><input type="text" name="name">
+    </div>
+    <br>
+    <div>
+        <span>Your email:        </span><input type="text" name="email">
+    </div>
+    <div>
+        <p>Your message:        </p>
+        <textarea rows="4" cols="50" name="message"></textarea>
+    </div>
+    <button type="submit">Go!</button>
+</form>
+<br>
 <h1>Messages</h1>
 <ul>
     {% for message in messages %}

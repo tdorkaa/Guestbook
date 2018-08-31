@@ -44,6 +44,17 @@ class GuestbookTest extends TestCase
     /**
      * @test
      */
+    public function calls_GuestbookWithErrorsParameters_Returns200AndTemplateContentsWithErrorMessages()
+    {
+        $errorMessage = 'wrong email';
+        $response = $this->runApp('GET', '/guestbook?errors=' . $errorMessage);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains($errorMessage, $response->getBody() . '');
+    }
+
+    /**
+     * @test
+     */
     public function calls_SaveGuestbook_Returns301WithRedirect()
     {
         $data = [

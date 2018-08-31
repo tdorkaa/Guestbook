@@ -44,7 +44,7 @@ class GuestbookTest extends TestCase
 
         $this->mockTwig->expects($this->once())
             ->method('render')
-            ->with($this->mockResponse, 'guestbook.html.twig', ['messages' => $messages]);
+            ->with($this->mockResponse, 'guestbook.html.twig', ['messages' => $messages, 'errors' => null]);
 
         $this->guestbook->getMessages($this->mockRequest, $this->mockResponse, []);
     }

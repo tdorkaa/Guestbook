@@ -36,8 +36,9 @@ class Guestbook
 
     public function getMessages(Request $request, Response $response, array $args)
     {
+        $errors = $request->getQueryParam('errors');
         $messages = $this->messagesDao->listMessages();
-        $this->twig->render($response, 'guestbook.html.twig', ['messages' => $messages]);
+        $this->twig->render($response, 'guestbook.html.twig', ['messages' => $messages, 'errors' => $errors]);
     }
 
     public function saveMessage(Request $request, Response $response, array $args)
