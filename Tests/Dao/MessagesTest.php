@@ -2,21 +2,21 @@
 
 namespace Tests\Dao;
 
-use Guestbook\Dao\Guestbook;
+use Guestbook\Dao\Messages;
 use Guestbook\PdoFactory;
 use PHPUnit\Framework\TestCase;
 
-class GuestbookTest extends TestCase
+class MessagesTest extends TestCase
 {
     private $PDO;
-    private $guestBookDao;
+    private $messagesDao;
 
     public function setUp()
     {
         $pdoFactory = new PdoFactory();
         $this->PDO = $pdoFactory->getPDO();
         $this->PDO->query('TRUNCATE TABLE messages');
-        $this->guestBookDao = new GuestBook($this->PDO);
+        $this->messagesDao = new Messages($this->PDO);
     }
 
     /**
@@ -33,7 +33,7 @@ class GuestbookTest extends TestCase
             ]
         ];
         $this->createRecords($records);
-        $result = $this->guestBookDao->listMessages();
+        $result = $this->messagesDao->listMessages();
 
         $this->assertEquals($records, $result);
     }
@@ -64,7 +64,7 @@ class GuestbookTest extends TestCase
             ]
         ];
         $this->createRecords($records);
-        $result = $this->guestBookDao->listMessages();
+        $result = $this->messagesDao->listMessages();
 
         $this->assertEquals($records[1], $result[0]);
         $this->assertEquals($records[0], $result[1]);
@@ -82,8 +82,9 @@ class GuestbookTest extends TestCase
         $message = 'test message';
         $date = '2018-08-21 10:00:00';
 
-        $this->guestBookDao->saveMessage($name, $email, $message, $date);
-        $result = $this->guestBookDao->listMessages();
+        $this->messagesDao->saveMessage($name, $email, $message, $date);
+        //ez igy jo?
+        $result = $this->messagesDao->listMessages();
 
         $this->assertEquals($name, $result[0]['name']);
         $this->assertEquals($email, $result[0]['email']);

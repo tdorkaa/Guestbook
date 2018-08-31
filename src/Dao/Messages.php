@@ -2,7 +2,7 @@
 
 namespace Guestbook\Dao;
 
-class Guestbook
+class Messages
 {
     private $PDO;
 

@@ -6,17 +6,17 @@ use PDO;
 
 class PdoFactory
 {
-    private $pdo = null;
+    private static $pdo = null;
 
     public function getPDO()
     {
-        if (!$this->pdo) {
+        if (!self::$pdo) {
             $userName =  getenv('DB_USER');
             $password = getenv('DB_PASSWORD');
-            $this->pdo = new PDO($this->getDsn(), $userName, $password);
+            self::$pdo = new PDO($this->getDsn(), $userName, $password);
         }
 
-        return $this->pdo;
+        return self::$pdo;
     }
 
     private function getDsn(): string
