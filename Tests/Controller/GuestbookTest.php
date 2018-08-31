@@ -5,6 +5,7 @@ namespace Tests\Controller;
 
 use Guestbook\Controller\Guestbook;
 use Guestbook\Dao\Messages;
+use Guestbook\InputValidator;
 use PHPUnit\Framework\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -26,7 +27,7 @@ class GuestbookTest extends TestCase
         $this->mockResponse = $this->createMock(Response::class);
         $this->mockRequest = $this->createMock(Request::class);
         $this->mockTwig = $this->createMock(Twig::class);
-        $this->guestbook = new Guestbook($this->mockMessagesDao, $this->mockTwig);
+        $this->guestbook = new Guestbook($this->mockMessagesDao, $this->mockTwig, $this->createMock(InputValidator::class));
     }
 
     /**

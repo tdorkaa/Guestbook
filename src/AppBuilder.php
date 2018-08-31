@@ -68,7 +68,8 @@ class AppBuilder
         $container[Guestbook::class] = function ($container) {
             return new Guestbook(
                 new Messages($container['pdo']),
-                $container['twig']
+                $container['twig'],
+                new InputValidator()
             );
         };
     }
