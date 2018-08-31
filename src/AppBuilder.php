@@ -3,9 +3,12 @@
 namespace Guestbook;
 
 use Dotenv\Dotenv;
+use Guestbook\Controller\Guestbook;
 use Guestbook\Controller\HealthCheck;
-use PDO;
+use Guestbook\Dao\Messages;
 use Slim\App;
+use Slim\Views\Twig;
+use Slim\Views\TwigExtension;
 
 class AppBuilder
 {
@@ -15,6 +18,7 @@ class AppBuilder
         $container = $app->getContainer();
 
         self::loadEnv();
+        self::setupTwig($container);
         self::setUpDb($container);
         self::setUpDependencies($container);
         self::setUpRoutes($app);
@@ -22,19 +26,34 @@ class AppBuilder
         return $app;
     }
 
-    private static function setUpRoutes($app)
+
+    public static function loadEnv()
     {
-        $app->get('/healthcheck', HealthCheck::class . ':healthcheck');
+        $dotenvFile = 'development.env';
+
+        $dotenv = new Dotenv(__DIR__ . '/../config', $dotenvFile);
+        $dotenv->load();
+    }
+
+    private static function setupTwig($container)
+    {
+        $container['twig'] = function ($container) {
+            $view = new Twig(__DIR__ . "/../view/", [
+                'cache' => false
+            ]);
+
+            // Instantiate and add Slim specific extension
+            $basePath = rtrim(str_ireplace('index.php', '', $container->get('request')->getUri()->getBasePath()), '/');
+            $view->addExtension(new TwigExtension($container->get('router'), $basePath));
+
+            return $view;
+        };
     }
 
     private static function setUpDb($container)
     {
         $container['pdo'] = function () {
-            return new PDO('mysql:host=mysql;charset=utf8mb4',
-                getenv('DB_USER'),
-                getenv('DB_PASSWORD'),
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-            );
+            return (new PdoFactory())->getPDO();
         };
     }
 
@@ -45,13 +64,18 @@ class AppBuilder
                 $container['pdo']
             );
         };
+
+        $container[Guestbook::class] = function ($container) {
+            return new Guestbook(
+                new Messages($container['pdo']),
+                $container['twig']
+            );
+        };
     }
 
-    public static function loadEnv()
+    private static function setUpRoutes($app)
     {
-        $dotenvFile = 'development.env';
-
-        $dotenv = new Dotenv(__DIR__ . '/../config', $dotenvFile);
-        $dotenv->load();
+        $app->get('/healthcheck', HealthCheck::class . ':healthcheck');
+        $app->get('/guestbook', Guestbook::class . ':getMessages');
     }
 }

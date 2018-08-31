@@ -2,6 +2,7 @@
 namespace Guestbook\Controller;
 
 
+use Guestbook\Dao\Messages;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Views\Twig;
@@ -10,7 +11,7 @@ class Guestbook
 {
 
     /**
-     * @var \Guestbook\Dao\Messages
+     * @var Messages
      */
     private $messagesDao;
 
@@ -19,7 +20,7 @@ class Guestbook
      */
     private $twig;
 
-    public function __construct(\Guestbook\Dao\Messages $messagesDao, Twig $twig)
+    public function __construct(Messages $messagesDao, Twig $twig)
     {
         $this->messagesDao = $messagesDao;
         $this->twig = $twig;
