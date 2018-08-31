@@ -55,7 +55,6 @@ class Guestbook
             $errors = $exception->getMessage();
         }
 
-
         $redirectUrl = '/guestbook' . ($errors ? '?errors=' . $errors : '');
         return $response->withRedirect($redirectUrl);
     }

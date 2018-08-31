@@ -13,6 +13,9 @@ class InputValidator
             if (!$v && $v !== '0') {
                 $errors[] = $k . ' required';
             }
+            if($k === 'Email' && $v && !filter_var($v, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = $k . ' is not correct';
+            }
         }
         if ($errors) {
             throw new \InvalidArgumentException(implode(',', $errors));
