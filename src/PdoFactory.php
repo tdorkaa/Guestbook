@@ -14,6 +14,7 @@ class PdoFactory
             $userName =  getenv('DB_USER');
             $password = getenv('DB_PASSWORD');
             self::$pdo = new PDO($this->getDsn(), $userName, $password);
+            self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 
         return self::$pdo;

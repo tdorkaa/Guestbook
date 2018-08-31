@@ -77,5 +77,6 @@ class AppBuilder
     {
         $app->get('/healthcheck', HealthCheck::class . ':healthcheck');
         $app->get('/guestbook', Guestbook::class . ':getMessages');
+        $app->post('/guestbook/save', Guestbook::class . ':saveMessage');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Guestbook\Controller;
 
 
@@ -40,8 +41,25 @@ class Guestbook
         $message = $request->getParam('message');
         $date = date('Y-m-d H:i:s');
 
-        $this->messagesDao->saveMessage($name, $email, $message, $date);
+        $errors = [];
 
-        $response->withRedirect('/guestbook');
+        if (!$name) {
+            $errors[] = 'Name required';
+        }
+
+        if (!$email) {
+            $errors[] = 'Email required';
+        }
+
+        if (!$message) {
+            $errors[] = 'Message required';
+        }
+
+        if (!$errors) {
+            $this->messagesDao->saveMessage($name, $email, $message, $date);
+        }
+
+        $redirectUrl = '/guestbook' . ($errors ? '?errors=' . implode(',', $errors) : '');
+        return $response->withRedirect($redirectUrl);
     }
 }
