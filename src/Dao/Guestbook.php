@@ -22,11 +22,8 @@ class Guestbook
     {
         $statement = $this->PDO->prepare('INSERT INTO messages (name, email, message, created_at)
                                                     VALUES (:name, :email, :message, :created_at)');
-        $statement->bindParam(':name', $name);
-        $statement->bindParam(':email', $email);
-        $statement->bindParam(':message', $message);
-        $statement->bindParam(':created_at', $date);
-        $statement->execute();
+        $statement->execute(array(':name' => $name, ':email' => $email, ':message' => $message,
+                                  ':created_at' => $date));
     }
 
 }
