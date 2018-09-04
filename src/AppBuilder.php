@@ -29,8 +29,11 @@ class AppBuilder
 
     public static function loadEnv()
     {
-        //TODO: use test file too
-        $dotenvFile = 'development.env';
+        if (getenv('APPLICATION_ENV') == 'test') {
+            $dotenvFile = 'test.env';
+        } else {
+            $dotenvFile = 'development.env';
+        }
 
         $dotenv = new Dotenv(__DIR__ . '/../config', $dotenvFile);
         $dotenv->load();
