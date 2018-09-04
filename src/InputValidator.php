@@ -2,7 +2,6 @@
 
 namespace Guestbook;
 
-
 class InputValidator
 {
 

@@ -83,7 +83,6 @@ class MessagesTest extends TestCase
         $date = '2018-08-21 10:00:00';
 
         $this->messagesDao->saveMessage($name, $email, $message, $date);
-        //ez igy jo?
         $result = $this->messagesDao->listMessages();
 
         $this->assertEquals($name, $result[0]['name']);

@@ -1,7 +1,6 @@
 <?php
 namespace Guestbook;
 
-
 class InputFilter
 {
 

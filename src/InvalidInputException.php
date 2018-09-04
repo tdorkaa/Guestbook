@@ -2,7 +2,6 @@
 
 namespace Guestbook;
 
-
 class InvalidInputException extends \Exception
 {
 
