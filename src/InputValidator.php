@@ -28,7 +28,7 @@ class InputValidator
      */
     private function validateEmpty($value): bool
     {
-        return !$value && $value !== '0';
+        return strlen($value) === 0;
     }
 
     /**
