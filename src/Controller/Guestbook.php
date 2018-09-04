@@ -5,6 +5,7 @@ namespace Guestbook\Controller;
 use Guestbook\Dao\Messages;
 use Guestbook\InputFilter;
 use Guestbook\InputValidator;
+use Guestbook\InvalidInputException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Views\Twig;
@@ -60,7 +61,7 @@ class Guestbook
         try {
             $this->validator->validate($name, $email, $message);
             $this->messagesDao->saveMessage($name, $email, $message, $date);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidInputException $exception) {
             $errors = $exception->getMessage();
         }
 

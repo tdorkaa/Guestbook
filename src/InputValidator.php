@@ -18,7 +18,7 @@ class InputValidator
             }
         }
         if ($errors) {
-            throw new \InvalidArgumentException(implode(',', $errors));
+            throw new InvalidInputException(implode(',', $errors));
         }
     }
 

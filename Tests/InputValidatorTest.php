@@ -2,6 +2,7 @@
 namespace Tests;
 
 use Guestbook\InputValidator;
+use Guestbook\InvalidInputException;
 use PHPUnit\Framework\TestCase;
 
 class InputValidatorTest extends TestCase
@@ -13,7 +14,17 @@ class InputValidatorTest extends TestCase
     
     protected function setUp()
     {
-        $this->inputValidator = new \Guestbook\InputValidator();
+        $this->inputValidator = new InputValidator();
+    }
+
+    /**
+     * @test
+     */
+    public function validate_GivenValidParams_NotThrowsException()
+    {
+        $this->inputValidator->validate('test name', 'test@test.test', 'message');
+        $this->expectNotToPerformAssertions();
+
     }
 
     /**
@@ -21,7 +32,7 @@ class InputValidatorTest extends TestCase
      */
     public function validate_GivenInputsEmpty_ThrowsException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidInputException::class);
         $this->expectExceptionMessage('Name required,Email required,Message required');
         $this->inputValidator->validate('', '', '');
     }
@@ -31,7 +42,7 @@ class InputValidatorTest extends TestCase
      */
     public function validate_GivenOneInputEmpty_ThrowsException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidInputException::class);
         $this->expectExceptionMessage('Name required');
         $this->inputValidator->validate('', 'a', 'a');
     }
@@ -45,7 +56,7 @@ class InputValidatorTest extends TestCase
             $this->inputValidator->validate('0', '', '');
             $this->fail('An exception was expected');
         }
-        catch (\InvalidArgumentException $exception)
+        catch (InvalidInputException $exception)
         {
             $this->assertEquals('Email required,Message required', $exception->getMessage());
         }
@@ -60,19 +71,9 @@ class InputValidatorTest extends TestCase
             $this->inputValidator->validate('test name', 'test@', 'message');
             $this->fail('An exception was expected');
         }
-        catch (\InvalidArgumentException $exception)
+        catch (InvalidInputException $exception)
         {
             $this->assertEquals('Email is not correct', $exception->getMessage());
         }
-    }
-
-    /**
-     * @test
-     */
-    public function validate_GivenValidParams_NotThrowsException()
-    {
-        $this->inputValidator->validate('test name', 'test@test.test', 'message');
-        $this->expectNotToPerformAssertions();
-
     }
 }
