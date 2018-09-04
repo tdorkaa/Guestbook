@@ -36,9 +36,9 @@ class GuestbookTest extends TestCase
 
         $response = $this->runApp('GET', '/guestbook');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains($name, $response->getBody() . '');
-        $this->assertContains($message, $response->getBody() . '');
-        $this->assertContains($date, $response->getBody() . '');
+        $this->assertContains($name, (String)$response->getBody());
+        $this->assertContains($message, (String)$response->getBody());
+        $this->assertContains($date, (String)$response->getBody());
     }
 
     /**
@@ -49,13 +49,13 @@ class GuestbookTest extends TestCase
         $errorMessage = 'wrong email';
         $response = $this->runApp('GET', '/guestbook?errors=' . $errorMessage);
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains($errorMessage, $response->getBody() . '');
+        $this->assertContains($errorMessage, (String)$response->getBody());
     }
 
     /**
      * @test
      */
-    public function calls_SaveGuestbook_Returns301WithRedirect()
+    public function calls_SaveGuestbook_Returns302WithRedirect()
     {
         $data = [
             'name' => 'Test name',
@@ -67,6 +67,24 @@ class GuestbookTest extends TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals($data['name'], $result[0]['name']);
+        $this->assertEquals($data['email'], $result[0]['email']);
+        $this->assertEquals($data['message'], $result[0]['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function calls_SaveGuestbookWithHtmlTags_ReturnsCleanData()
+    {
+        $data = [
+            'name' => 'Test name<br>',
+            'email' => 'test@test.test',
+            'message' => 'Test message'
+        ];
+        $this->runApp('POST', '/guestbook/save', $data);
+        $result = $this->messagesDao->listMessages();
+
+        $this->assertEquals('Test name', $result[0]['name']);
         $this->assertEquals($data['email'], $result[0]['email']);
         $this->assertEquals($data['message'], $result[0]['message']);
     }

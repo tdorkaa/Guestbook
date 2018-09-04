@@ -5,6 +5,7 @@ namespace Guestbook\Controller;
 
 use DateTime;
 use Guestbook\Dao\Messages;
+use Guestbook\InputFilter;
 use Guestbook\InputValidator;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -22,16 +23,24 @@ class Guestbook
      * @var Twig
      */
     private $twig;
+
     /**
      * @var InputValidator
      */
     private $validator;
 
-    public function __construct(Messages $messagesDao, Twig $twig, InputValidator $validator)
+    /**
+     * @var InputFilter
+     */
+    private $inputFilter;
+
+    public function __construct(Messages $messagesDao, Twig $twig, InputValidator $validator, InputFilter $filter = null)
     {
         $this->messagesDao = $messagesDao;
         $this->twig = $twig;
         $this->validator = $validator;
+        //ez igy nem baj?
+        $this->inputFilter = $filter ? $filter : new InputFilter();
     }
 
     public function getMessages(Request $request, Response $response, array $args)
@@ -43,9 +52,10 @@ class Guestbook
 
     public function saveMessage(Request $request, Response $response, array $args)
     {
-        $name = $request->getParam('name');
-        $email = $request->getParam('email');
-        $message = $request->getParam('message');
+        $inputFilter = $this->inputFilter;
+        $name = $inputFilter->filter($request->getParam('name'));
+        $email = $inputFilter->filter($request->getParam('email'));
+        $message = $inputFilter->filter($request->getParam('message'));
         $date = date('Y-m-d H:i:s');
         $errors = '';
 

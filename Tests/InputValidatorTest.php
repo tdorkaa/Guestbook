@@ -71,8 +71,8 @@ class InputValidatorTest extends TestCase
      */
     public function validate_GivenValidParams_NotThrowsException()
     {
-        $result = $this->inputValidator->validate('test name', 'test@test.test', 'message');
-        $this->assertNull($result);
+        $this->inputValidator->validate('test name', 'test@test.test', 'message');
+        $this->expectNotToPerformAssertions();
 
     }
 }

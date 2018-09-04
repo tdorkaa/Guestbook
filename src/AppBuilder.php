@@ -29,6 +29,7 @@ class AppBuilder
 
     public static function loadEnv()
     {
+        //TODO: use test file too
         $dotenvFile = 'development.env';
 
         $dotenv = new Dotenv(__DIR__ . '/../config', $dotenvFile);

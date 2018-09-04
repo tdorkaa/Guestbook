@@ -1,7 +1,5 @@
 <?php
 
-require 'vendor/autoload.php';
-
 $pdo = new PDO('mysql:host=mysql;charset=utf8mb4', 'academy', 'academy');
 $pdo->query("CREATE DATABASE IF NOT EXISTS guestbook");
 $pdo->query("CREATE DATABASE IF NOT EXISTS guestbook_test");
