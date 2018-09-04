@@ -2,8 +2,6 @@
 
 namespace Guestbook\Controller;
 
-
-use DateTime;
 use Guestbook\Dao\Messages;
 use Guestbook\InputFilter;
 use Guestbook\InputValidator;

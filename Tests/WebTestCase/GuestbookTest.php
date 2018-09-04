@@ -55,7 +55,7 @@ class GuestbookTest extends TestCase
     /**
      * @test
      */
-    public function calls_SaveGuestbook_Returns302WithRedirect()
+    public function calls_SaveGuestbookWithValidData_Returns302WithRedirect()
     {
         $data = [
             'name' => 'Test name',
@@ -66,6 +66,7 @@ class GuestbookTest extends TestCase
         $result = $this->messagesDao->listMessages();
 
         $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/guestbook', $response->getHeaderLine('Location'));
         $this->assertEquals($data['name'], $result[0]['name']);
         $this->assertEquals($data['email'], $result[0]['email']);
         $this->assertEquals($data['message'], $result[0]['message']);
@@ -85,8 +86,6 @@ class GuestbookTest extends TestCase
         $result = $this->messagesDao->listMessages();
 
         $this->assertEquals('Test name', $result[0]['name']);
-        $this->assertEquals($data['email'], $result[0]['email']);
-        $this->assertEquals($data['message'], $result[0]['message']);
     }
 
     /**
@@ -99,7 +98,26 @@ class GuestbookTest extends TestCase
         $result = $this->messagesDao->listMessages();
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertContains('?errors=Name required,Email required,Message required', $response->getHeaderLine('Location'));
+        $this->assertEquals('/guestbook?errors=Name required,Email required,Message required', $response->getHeaderLine('Location'));
+        $this->assertEquals(0, count($result));
+    }
+
+    /**
+     * @test
+     */
+    public function calls_SaveGuestbookWithInvalidEmail_ReturnsWithErrorMessage()
+    {
+        $data = [
+            'name' => 'Test name',
+            'email' => 'test@test',
+            'message' => 'Test message'
+        ];
+
+        $response = $this->runApp('POST', '/guestbook/save', $data);
+        $result = $this->messagesDao->listMessages();
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/guestbook?errors=Email is not correct', $response->getHeaderLine('Location'));
         $this->assertEquals(0, count($result));
     }
 }
